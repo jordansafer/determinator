@@ -6,6 +6,7 @@ def getAltitude(line):
     altI = string.find(line, "A") # the first letter in altitude
     start = altI + altLen
     finish = string.find(line, " ", start)
+    if (start == -1): return 0
     return float(line[start:finish])
 
 
@@ -16,6 +17,7 @@ def getAcceleration(line):
     accI = string.find(line, "Q") # the first letter in Q values
     start = accI + accLen
     finish = string.find(line, " ", start)
+    if (start == -1): return [0,0,0,0]
     result = [float(line[start:finish])]
     # get the remaining accleration values
     for i in xrange(3): # number of other values
@@ -24,6 +26,7 @@ def getAcceleration(line):
         barlen = 2 # length of bar and space
         start = bar + barlen
         finish = finish = string.find(line, " ", start)
+        if (start == -1): return [0,0,0,0]
         result.append(float(line[start:finish]))
     return result  
 
@@ -35,6 +38,7 @@ def getAngles(line):
     angI = string.find(line, "E") # the first letter in Euler
     start = angI + angLen
     finish = string.find(line, " ", start)
+    if (start == -1): return [0,0,0]
     result = [float(line[start:finish])]
     # get the remaining accleration values
     for i in xrange(2): # number of other values
@@ -43,6 +47,7 @@ def getAngles(line):
         barlen = 2 # length of bar and space
         start = bar + barlen
         finish = finish = string.find(line, " ", start)
+        if (start == -1): return [0,0,0]
         result.append(float(line[start:finish]))
     return result  
 
