@@ -29,13 +29,30 @@ def getAcceleration(line):
     return result  
 
 
+# get the Euler angles
+def getAngles(line):
+    # get the first angle
+    angLen = 14  # length of Euler angles: is 14
+    angI = string.find(line, "E") # the first letter in Euler
+    start = angI + angLen
+    finish = string.find(line, " ", start)
+    result = [float(line[start:finish])]
+    # get the remaining accleration values
+    for i in xrange(2): # number of other values
+        current = finish
+        bar = string.find(line, "|", current)
+        barlen = 2 # length of bar and space
+        start = bar + barlen
+        finish = finish = string.find(line, " ", start)
+        result.append(float(line[start:finish]))
+    return result  
+
 
 ser = serial.Serial('/dev/tty.usbserial-DA01P1HX')
 
 while(1):
       line = ser.readline()
-      print line, getAltitude(line), getAcceleration(line)
-
+      print line, getAltitude(line), getAcceleration(line), getAngles(line)
 
 
 
