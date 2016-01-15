@@ -23,7 +23,7 @@ def makeReadings(memory):
 
 
     accels = []
-    for i in xrange(4):
+    for i in xrange(3):
         accels.append(niceQ(memory))
     heights = niceQ(memory)
 
@@ -40,17 +40,18 @@ def makeReadings(memory):
         acc = IM.getAcceleration(line)
         alt = IM.getAltitude(line)
         
+        delalt = abs(heights.avgQ() - alt)
         delta = 0
-        for i in xrange(4):
+
+        heights.pushQ(alt)
+        for i in xrange(3):
             if(reads > 20):
                 dif = abs(accels[i].avgQ() - acc[i])
                 delta += dif
             accels[i].pushQ(acc[i])
-        if delta > .6:
+        if delta > 5 and delalt > 1:
             print "Throw"
         print delta
 
-
-makeReadings(10)
 
 
