@@ -3,10 +3,13 @@ import serialtest
 import thread
 import time
 
-_recording = False
+
 _new = False
-_userid = ""
 _completed = True
+dataset = [] #List which stores EVERYONE'S data
+PersonName = ""
+collectingData = False
+
 
 # basic MVC animation setup with Tkinter
 class DeterminatorAnimation(object):
@@ -25,7 +28,8 @@ class DeterminatorAnimation(object):
         self.initAnimation()
 
         # add actions
-        self.root.bind("<Button-1>", lambda event: self.onMousePressedWrapper(event))
+        self.root.bind("<Button-1>", lambda event: 
+                                      self.onMousePressedWrapper(event))
         self.root.bind("<Key>", lambda event: self.onKeyPressedWrapper(event))
         self.onTimerFiredWrapper()
 
@@ -147,34 +151,31 @@ class DeterminatorAnimation(object):
 
     ## user select screen logic
     def clickChooseUser(self, event):
-        global _recording, _new, _completed, _userid
+        global collectingData, _new, _completed, PersonName
         if self.returnButton.isClicked(event.x, event.y):
             lock = thread.allocate_lock()
             with lock:
-                _recording = True
+                CollectingData = True
                 _new = False
                 _completed = False
         if self.newButton.isClicked(event.x, event.y):
             lock = thread.allocate_lock()
             with lock:
-                _recording = True
+                CollectingData = True
                 _new = True
-                _userid = "Joe"
+                PersonName = "Joe" # replace with function prompting user
                 _completed = False
             self.page = "load"
 
     ## awaiting results screen logic
     def clickLoading(self, event):
-        global _recording, _new, _completed, _userid
+        global CollectingData
         while(not _completed):
             time.sleep(.2)
         self.page = "done"
         lock = thread.allocate_lock()
         with lock:
-            _recording = False
-            _new = True
-            _userid = "Joe"
-            _completed = False
+            CollectingData = False
 
     ## results screen logic
     def clickResults(self, event):
