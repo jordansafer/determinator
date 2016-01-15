@@ -166,7 +166,8 @@ def makeReadings(memory):
                                 config.dataset.append( (config.PersonName, onePersonData) )
                             #    #Add a record of person's data to set
                             else:
-                                config.PersonName = analyze(onePersonData)
+                                pass
+                                #config.PersonName = analyze(onePersonData)
                             config.completed = True
 
                             time.sleep(1)

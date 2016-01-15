@@ -156,15 +156,21 @@ class DeterminatorAnimation(object):
         text = "Hello{0}. Throw to see your stats.".format(config.PersonName)
         self.canvas.create_text(self.width / 2, self.height * 1 / 8,
                         text = text , font = "Georgia 50 bold")
+        power = "Rating: " + str(config.power_current) + "\t\tCurrent highscore: " \
+                                        + str(config.power_highscore)
         self.canvas.create_text(self.width / 2, self.height * 2 / 8,
-                        text = "Power: " + str(config.power_current) + "\t\tCurrent power highscore: " + str(config.power_highscore), font = "Georgia 25")
+                        text = power, font = "Georgia 25")
+        text2 = "Distance: " + str(config.distance_current) + " feet" + "\tCurrent distance highscore: "\
+                                                + str(config.distance_highscore)
         self.canvas.create_text(self.width / 2, self.height * 3 / 8,
-                        text = "Distance: " + str(config.distance_current) + "\tCurrent distance highscore: " + str(config.distance_highscore), font = "Georgia 25")
+                        text = text2, font = "Georgia 25")
+        hang = "Hangtime: " + str(config.hangtime_current) + " s" + "\tCurrent hangtime highscore: "\
+                                                + str(config.hangtime_highscore)
         self.canvas.create_text(self.width / 2, self.height * 4 / 8,
-                        text = "Hangtime: " + str(config.hangtime_current) + "\tCurrent hangtime highscore: " + str(config.hangtime_highscore), font = "Georgia 25")
+                        text = hang, font = "Georgia 25")
         if config.power_current == config.power_highscore and config.power_highscore != 0:
             self.canvas.create_text(self.width / 2, self.height * 5 / 8,
-                        text = "NEW POWER HIGHSCORE!  \t" + str(config.power_highscore), font = "Georgia 25 bold")
+                        text = "NEW POWER RATING HIGHSCORE!  \t" + str(config.power_highscore), font = "Georgia 25 bold")
         if config.distance_current == config.distance_highscore and config.distance_highscore != 0:
              self.canvas.create_text(self.width / 2, self.height * 6 / 8,
                         text = "NEW DISTANCE HIGHSCORE!  \t" + str(config.distance_highscore), font = "Georgia 25 bold")
