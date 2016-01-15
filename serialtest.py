@@ -49,9 +49,12 @@ def makeReadings(memory):
                 dif = abs(accels[i].avgQ() - acc[i])
                 delta += dif
             accels[i].pushQ(acc[i])
-        if delta > 5 and delalt > 1:
-            print "Throw"
-        print delta
+        if delta > 2.5:
+            print "Delta:", delta
+            if delta > 4:
+                print "Alt:", delalt
+                if delalt > 1.5:
+                   print "Throw"
 
 
 
