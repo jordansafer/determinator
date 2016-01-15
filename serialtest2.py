@@ -89,25 +89,42 @@ def makeReadings(memory):
         #print "AccelMag ", accMag, "\t", len(accelList)
         prevacc = acc
         alt = 0
+<<<<<<< HEAD
 	#print accelList
         #print config.collectingData
         if accMag == 0: #or (not config.collectingData):
             continue
         #print acc[0], " ", acc[1], " ", acc[2]
+=======
+        print config.CollectingData
+        if accMag == 0 or (not config.CollectingData):
+            continue
+        print acc[0], " ", acc[1], " ", acc[2]
+>>>>>>> origin/master
         if(accMag > 1.5):
             count+=1
             data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])
             dataForML.append((alt, accMag))
             accelList.append(accMag)
+<<<<<<< HEAD
 	elif len(accelList) > 0 and accelList[0] > 1.5 and count < 4:
+=======
+        elif count < 0:
+>>>>>>> origin/master
             data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])
             dataForML.append((alt, accMag))
             accelList.append(accMag)
             count+=1
         else:
+<<<<<<< HEAD
             if len(accelList) > 4:
 	    #print "accel time sustain satisfied"
                 if max(accelList) > 4:
+=======
+            if len(accelList) > 7:
+            #print "accel time sustain satisfied"
+                if max(accelList) > 3.5:
+>>>>>>> origin/master
                 #print "min accel reached"
                     if True:#total1<total2 and total2>total3:
                         #print "bell curve satisfied"
@@ -133,12 +150,18 @@ def makeReadings(memory):
                         deltaA4 = abs(data[1][0])
                         deltaA6 = (deltaA1**2 + deltaA3**2)**.5
                         deltaA7 = (deltaA1**2 + deltaA2**2 + deltaA3**2)**.5
+<<<<<<< HEAD
                         #print "got to hangtime: ", deltaTotalTime
                         if(deltaTotalTime > 0.3):#deltaAlt > 0):
+=======
+                        print "got to hangtime: ", deltaTotalTime
+                        if(deltaTotalTime > 0.30):#deltaAlt > 0):
+>>>>>>> origin/master
                             print "BALL WAS THROWN"
                             #print "Altitude Change: ", deltaAlt
                             print "Power of throw (0-100): ", int(max(accelList)*9)
                             print "Hang time: ", deltaTotalTime
+<<<<<<< HEAD
                             print "Distance: ", max(accelList)*deltaT * deltaTotalTime * 32.2
                             print "Distance: ", deltaA6*deltaT * deltaTotalTime * 32.2
                             print "Distance: ", deltaA7*deltaT * deltaTotalTime * 32.2
@@ -151,6 +174,21 @@ def makeReadings(memory):
                             #else:
                             #    config.PersonName = analyze(onePersonData)
                             #config.completed = True
+=======
+                            print "Distance: ", deltaA1*deltaT * deltaTotalTime * 32.2
+                            print "Distance: ", deltaA2*deltaT * deltaTotalTime * 32.2
+                            print "Distance: ", deltaA3*deltaT * deltaTotalTime * 32.2
+                            print "Distance: ", deltaA6*deltaT * deltaTotalTime * 32.2
+                            print "Distance: ", deltaA7*deltaT * deltaTotalTime * 32.2
+                            print "list lenL ", len(accelList)
+                            onePersonData = dataForML
+                            if(config.new):
+                                config.dataset.append( (config.PersonName, onePersonData) )
+                                #Add a record of person's data to set
+                            else:
+                                config.PersonName = analyze(onePersonData)
+                            config.completed = True
+>>>>>>> origin/master
                         #print data
             accelList = []
             data = []
