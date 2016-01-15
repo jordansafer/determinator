@@ -2,7 +2,7 @@ import string
 
 # get the altitude
 def getAltitude(line):
-    altLen = 13  # length of Altitude(ft): is 13
+    altLen = 14  # length of Altitude(ft): is 13
     altI = string.find(line, "A") # the first letter in altitude
     start = altI + altLen
     finish = string.find(line, " ", start)

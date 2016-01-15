@@ -16,14 +16,16 @@ class niceQ:
         return sum(self.vals)/self.size
 
 # function to make the readings
-def makeReadings(): 
+def makeReadings(memory): 
     # open a serial connection
     ser = serial.Serial('/dev/tty.usbserial-DA01P1HX')
     IM = imuValueExtractors
 
+
     accels = []
     for i in xrange(4):
-        accels.append(niceQ(10))
+        accels.append(niceQ(memory))
+    heights = niceQ(memory)
 
     reads = 0
 
@@ -36,16 +38,19 @@ def makeReadings():
             continue # throw the first few lines to be safe
         
         acc = IM.getAcceleration(line)
+        alt = IM.getAltitude(line)
+        
         delta = 0
         for i in xrange(4):
-            dif = abs(accels[i].avgQ() - acc[i])
-            delta += dif
+            if(reads > 20):
+                dif = abs(accels[i].avgQ() - acc[i])
+                delta += dif
             accels[i].pushQ(acc[i])
         if delta > .6:
             print "Throw"
         print delta
 
 
-makeReadings()
+makeReadings(10)
 
 
