@@ -89,8 +89,9 @@ def makeReadings(memory):
         #print "AccelMag ", accMag, "\t", len(accelList)
         prevacc = acc
         alt = 0
-        print config.collectingData
-        if accMag == 0 or (not config.collectingData):
+	      #print accelList
+        #print config.collectingData
+        if accMag == 0: #or (not config.collectingData):
             continue
         #print acc[0], " ", acc[1], " ", acc[2]
         if(accMag > 1.5):
@@ -98,15 +99,15 @@ def makeReadings(memory):
             data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])
             dataForML.append((alt, accMag))
             accelList.append(accMag)
-        elif count < 0:
+	      elif len(accelList) > 0 and accelList[0] > 1.5 and count < 4:
             data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])
             dataForML.append((alt, accMag))
             accelList.append(accMag)
             count+=1
         else:
-            if len(accelList) > 7:
+            if len(accelList) > 4:
             #print "accel time sustain satisfied"
-                if max(accelList) > 3.5:
+                if max(accelList) > 4:
                 #print "min accel reached"
                     if True:#total1<total2 and total2>total3:
                         #print "bell curve satisfied"
@@ -132,25 +133,24 @@ def makeReadings(memory):
                         deltaA4 = abs(data[1][0])
                         deltaA6 = (deltaA1**2 + deltaA3**2)**.5
                         deltaA7 = (deltaA1**2 + deltaA2**2 + deltaA3**2)**.5
-                        print "got to hangtime: ", deltaTotalTime
-                        if(deltaTotalTime > 0.30):#deltaAlt > 0):
+                        #print "got to hangtime: ", deltaTotalTime
+                        if(deltaTotalTime > 0.3):#deltaAlt > 0):
                             print "BALL WAS THROWN"
                             #print "Altitude Change: ", deltaAlt
                             print "Power of throw (0-100): ", int(max(accelList)*9)
                             print "Hang time: ", deltaTotalTime
-                            print "Distance: ", deltaA1*deltaT * deltaTotalTime * 32.2
-                            print "Distance: ", deltaA2*deltaT * deltaTotalTime * 32.2
-                            print "Distance: ", deltaA3*deltaT * deltaTotalTime * 32.2
+                            print "Distance: ", max(accelList)*deltaT * deltaTotalTime * 32.2
                             print "Distance: ", deltaA6*deltaT * deltaTotalTime * 32.2
                             print "Distance: ", deltaA7*deltaT * deltaTotalTime * 32.2
-                            print "list lenL ", len(accelList)
-                            onePersonData = dataForML
-                            if(config.new):
-                                config.dataset.append( (config.PersonName, onePersonData) )
-                                #Add a record of person's data to set
-                            else:
-                                config.PersonName = analyze(onePersonData)
-                            config.completed = True
+                            #print "list lenL ", len(accelList)
+                            #print "accelList ", accelList
+			    #onePersonData = list(dataForML)
+                            #if(config.new):
+                            #    config.dataset.append( (config.PersonName, onePersonData) )
+                            #    #Add a record of person's data to set
+                            #else:
+                            #    config.PersonName = analyze(onePersonData)
+                            #config.completed = True
                         #print data
             accelList = []
             data = []
