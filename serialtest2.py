@@ -3,6 +3,7 @@ import imuValueExtractors
 import math
 import time
 import config
+import copy
 
 class niceQ:
     def __init__(self, size):
@@ -89,7 +90,7 @@ def makeReadings(memory):
         #print "AccelMag ", accMag, "\t", len(accelList)
         prevacc = acc
         alt = 0
-	      #print accelList
+        #print accelList
         #print config.collectingData
         if accMag == 0: #or (not config.collectingData):
             continue
@@ -99,7 +100,7 @@ def makeReadings(memory):
             data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])
             dataForML.append((alt, accMag))
             accelList.append(accMag)
-	      elif len(accelList) > 0 and accelList[0] > 1.5 and count < 4:
+        elif len(accelList) > 0 and accelList[0] > 1.5 and count < 4:
             data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])
             dataForML.append((alt, accMag))
             accelList.append(accMag)
@@ -144,13 +145,13 @@ def makeReadings(memory):
                             print "Distance: ", deltaA7*deltaT * deltaTotalTime * 32.2
                             #print "list lenL ", len(accelList)
                             #print "accelList ", accelList
-			    #onePersonData = list(dataForML)
-                            #if(config.new):
-                            #    config.dataset.append( (config.PersonName, onePersonData) )
+                            onePersonData = copy.deepcopy(dataForML)
+                            if(config.new):
+                                config.dataset.append( (config.PersonName, onePersonData) )
                             #    #Add a record of person's data to set
-                            #else:
-                            #    config.PersonName = analyze(onePersonData)
-                            #config.completed = True
+                            else:
+                                config.PersonName = analyze(onePersonData)
+                            config.completed = True
                         #print data
             accelList = []
             data = []

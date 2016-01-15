@@ -130,6 +130,8 @@ class DeterminatorAnimation(object):
     ## results screen
     def drawResults(self):
         self.backButton.draw(self.canvas)
+        self.canvas.create_text(self.width / 2, self.height / heightScale,
+                        text = "Textr", font = "Georgia 70 bold")
 
     ################# Controller Time ############
     ## Mouse stuff ##
@@ -157,6 +159,7 @@ class DeterminatorAnimation(object):
             config.collectingData = True
             config.new = False
             config.completed = False
+            self.page = "load"
         if self.newButton.isClicked(event.x, event.y):
             config.collectingData = True
             config.new = True
@@ -168,7 +171,7 @@ class DeterminatorAnimation(object):
     def clickResults(self, event):
         if self.backButton.isClicked(event.x, event.y):
             self.page = "choose"
-            
+
 
     ## KeyBoard stuff ############
     def onKeyPressed(self, event):
