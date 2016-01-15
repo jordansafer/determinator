@@ -51,6 +51,10 @@ def gatherData():
     
     return oneset
 
+def resetHighscores():
+    config.power_highscore = 0
+    config.distance_highscore = 0
+    config.hangtime_highscore = 0
 # function to make the readings
 #This function returns another tuple
 # ( PersonName, [ [ (Alt1, Acc1), (Alt2, Acc2), ... ],
@@ -61,8 +65,10 @@ def gatherData():
 #
 def makeReadings(memory):
     # open a serial connection
-    ser = serial.Serial('/dev/tty.usbserial-DA01QTU5')
+    ser = serial.Serial('/dev/tty.usbserial-DA01P1HX')
     IM = imuValueExtractors
+
+    resetHighscores()
 
     accels = []
     for i in xrange(3):
@@ -70,6 +76,11 @@ def makeReadings(memory):
     count = 0
     reads = 0
     prevacc = [0, 0, 0]
+
+
+    config.power_current = 0
+    config.distance_current = 0
+    config.hangtime_current = 0
 
     accelList = []
     dataForML = []
@@ -132,19 +143,24 @@ def makeReadings(memory):
                         deltaA2 = abs(data[1][2] - acc[1])
                         deltaA3 = abs(data[1][3] - acc[2])
                         deltaA4 = abs(data[1][0])
-                        deltaA6 = (deltaA1**2 + deltaA3**2)**.5
-                        deltaA7 = (deltaA1**2 + deltaA2**2 + deltaA3**2)**.5
                         #print "got to hangtime: ", deltaTotalTime
                         if(deltaTotalTime > 0.3):#deltaAlt > 0):
                             print "BALL WAS THROWN"
                             #print "Altitude Change: ", deltaAlt
-                            print "Power of throw (0-100): ", int(max(accelList)*9)
-                            print "Hang time: ", deltaTotalTime
-                            print "Distance: ", max(accelList)*deltaT * deltaTotalTime * 32.2
-                            print "Distance: ", deltaA6*deltaT * deltaTotalTime * 32.2
-                            print "Distance: ", deltaA7*deltaT * deltaTotalTime * 32.2
-                            #print "list lenL ", len(accelList)
-                            #print "accelList ", accelList
+                            config.power_current = int(max(accelList)*9)
+                            config.hangtime_current = deltaTotalTime
+                            config.distance_current = max(accelList)*deltaT * deltaTotalTime * 32.2
+                            print "Power of throw (0-100): ", config.power_current
+                            print "Hang time: ", config.hangtime_current
+                            print "Distance: ", config.distance_current
+
+                            if(config.distance_current > config.distance_highscore):
+                                config.distance_highscore = config.distance_current
+                            if(config.hangtime_current > config.hangtime_highscore):
+                                config.hangtime_highscore = config.hangtime_current
+                            if(config.power_current > config.power_highscore):
+                                config.power_highscore = config.power_current
+
                             onePersonData = copy.deepcopy(dataForML)
                             if(config.new):
                                 config.dataset.append( (config.PersonName, onePersonData) )
@@ -152,6 +168,10 @@ def makeReadings(memory):
                             else:
                                 config.PersonName = analyze(onePersonData)
                             config.completed = True
+
+                            time.sleep(1)
+
+
                         #print data
             accelList = []
             data = []

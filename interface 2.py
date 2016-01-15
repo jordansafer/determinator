@@ -1,9 +1,9 @@
 from Tkinter import *
+import Tkinter
 import serialtest2
 import thread
 import time
 import config
-
 
 
 
@@ -34,7 +34,7 @@ class DeterminatorAnimation(object):
                                       self.onMousePressedWrapper(event))
         self.root.bind("<Key>", lambda event: self.onKeyPressedWrapper(event))
         self.onTimerFiredWrapper()
-
+        
         # run the program
         self.root.mainloop()
 
@@ -71,15 +71,15 @@ class DeterminatorAnimation(object):
     ## user select screen
     def initChooseUser(self):
         (x, y) = (.25 * self.width, .4 * self.height)
-        (dx, dy) = (.18 * self.width, .15 * self.height)
+        (dx, dy) = (.2 * self.width, .4 * self.height)
         (p1, p2) = self.getPoints((x, y), dx, dy)
-        self.newButton = BetterButton(p1, p2, fill="#FFFBD0",
-            text="New User", font = "arial 60 bold")
+        self.newButton = BetterButton(p1, p2, fill="#32B141",
+            text="New User", font = "arial 40 bold")
         (x, y) = (.75 * self.width, .4 * self.height)
-        (dx, dy) = (.18 * self.width, .15 * self.height)
+        (dx, dy) = (.2 * self.width, .4 * self.height)
         (p1, p2) = self.getPoints((x, y), dx, dy)
-        self.returnButton = BetterButton(p1, p2, fill="#FFFBD0",
-            text="Returning User", font = "arial 60 bold")
+        self.returnButton = BetterButton(p1, p2, fill="#32B141",
+            text="Returning User", font = "arial 40 bold")
 
     ## awaiting results screen
     def initLoading(self):
@@ -110,37 +110,19 @@ class DeterminatorAnimation(object):
         elif self.page == "choose":
             self.drawChooseUser()
         elif self.page == "load":
+            #self.drawLoading()
             self.drawResults()
         elif self.page == "done":
             self.drawResults()
 
     ## start screen
     def drawStart(self):
-        self.canvas.create_rectangle(0, 0, self.width/1.9, self.height,
-                                                        fill = "blue")
-        self.canvas.create_rectangle(self.width/2, 0, self.width, self.height,
-                                                        fill = "red")
-        self.canvas.create_text(self.width / 2, self.height / 4,
-                    text = "The Determinator", font = "Georgia 100 bold")
         self.startButton.draw(self.canvas)
 
     ## user select screen
     def drawChooseUser(self):
-        self.canvas.create_polygon(0,0, self.width, 0, 0, self.height,
-                                                        fill = "#C13100")
-        self.canvas.create_polygon(self.width, 0, 0, self.height,
-                            self.width / 2, self.height, fill = "#FF9900")
-        self.canvas.create_polygon(self.width, 0, self.width / 2, self.height,
-                            self.width, self.height, fill = "#CC6600")
         self.newButton.draw(self.canvas)
         self.returnButton.draw(self.canvas)
-        self.canvas.create_text(self.width / 2, self.height / 8,
-            text = "Get ready to throw the ball.", font = "Impact 65")
-        self.canvas.create_text(self.width / 2, self.height / 1.4,
-            text = "\"Always channel your inner Peyton Manning\"",
-            font = "Luminari 50")
-        self.canvas.create_text(self.width / 2, self.height / 1.2,
-            text = "-Peyton Manning", font = "Luminari 50")
 
     ## awaiting results screen
     def drawLoading(self):
@@ -172,6 +154,7 @@ class DeterminatorAnimation(object):
              self.canvas.create_text(self.width / 2, self.height * 7 / 8,
                         text = "NEW HANGTIME HIGHSCORE!  \t" + str(config.hangtime_highscore), font = "Georgia 25 bold")
 
+
     ################# Controller Time ############
     ## Mouse stuff ##
     def onMousePressed(self, event):
@@ -180,7 +163,7 @@ class DeterminatorAnimation(object):
         elif self.page == "choose":
             self.clickChooseUser(event)
         elif self.page == "load":
-            self.clickResults(event)
+            return
         elif self.page == "done":
             self.clickResults(event)
 
