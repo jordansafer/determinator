@@ -56,5 +56,5 @@ def makeReadings(memory):
                 if delalt > 1.5:
                    print "Throw"
 
-
+#makeReadings(10)
 
