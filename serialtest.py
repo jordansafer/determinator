@@ -56,7 +56,8 @@ def gatherData():
 #                               .....                  ]  )
 #
 #
-def makeReadings(memory): 
+def makeReadings(memory):
+    global _completed, PersonName
     # open a serial connection
     ser = serial.Serial('/dev/tty.usbserial-DA01P1HX')
     IM = imuValueExtractors
@@ -69,14 +70,15 @@ def makeReadings(memory):
     reads = 0
     thrown = False
 
-    onePersonData = []
+
 
     while(1): #Need some way of terminating this loop using collectingData
         reads += 1
         
         line = ser.readline()
-        if(reads < 6):
-            print 6 - reads
+        delay = 6
+        if(reads < delay):
+            print delay - reads
             continue # throw the first few lines to be safe
         
         acc = IM.getAcceleration(line) #[acc1, acc2, acc3]
@@ -98,12 +100,17 @@ def makeReadings(memory):
                 if delalt > 1.5:
                    thrown = True
 
-        if thrown:
-            oneset = gatherData()
-            onePersonData.append(oneset)
+        if thrown and collectingData:
+            onePersonData = gatherData()
+            if(_new):
+                dataset.append( (PersonName, onePersonData) )
+                #Add a record of person's data to set
+            else:
+                PersonName = analyze(onePersonData)
+            _completed = True
             thrown = False
                 
-     dataset.append( (PersonName, onePersonData) ) #Add a record of person's data to set
+
 
 #
 def analyze(oneset):
@@ -130,53 +137,6 @@ def analyze(oneset):
         if (difference < result[1]):
             result = (Person[0], difference) #Update as a tuple of new name, and new difference
 
-     return result[0]
+    return result[0]
 
-#This function takes readings for a plain throw, no data collection occurs
-#It then compares the readings to our global data set, and tries to match up the
-#readings to the closest one.
-def plainThrow:
-    # open a serial connection
-    ser = serial.Serial('/dev/tty.usbserial-DA01P1HX')
-    IM = imuValueExtractors
-
-    accels = []
-    for i in xrange(3):
-        accels.append(niceQ(memory))
-    heights = niceQ(memory)
-
-    reads = 0
-    thrown = False
-
-    while(1): #Need some way of terminating this loop using collectingData
-        reads += 1
-        
-        line = ser.readline()
-        if(reads < 6):
-            print 6 - reads
-            continue # throw the first few lines to be safe
-        
-        acc = IM.getAcceleration(line) #[acc1, acc2, acc3]
-        alt = IM.getAltitude(line)     #alt
-        
-        delalt = abs(heights.avgQ() - alt)
-        delta = 0
-
-        heights.pushQ(alt)
-        for i in xrange(3):
-            if(reads > memory + 5):
-                dif = abs(accels[i].avgQ() - acc[i])
-                delta += dif
-            accels[i].pushQ(acc[i])
-        if delta > 2.5:
-            print "Delta:", delta
-            if delta > 4:
-                print "Alt:", delalt
-                if delalt > 1.5:
-                   thrown = True
-
-        if thrown:
-            oneset = gatherData()
-            PersonName = analyze(oneset)
-            return PersonName
 
