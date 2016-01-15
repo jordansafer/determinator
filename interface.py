@@ -1,20 +1,22 @@
 from Tkinter import *
-import serialtest
+import serialtest2
 import thread
 import time
+import config
 
 
-_new = False
-_completed = True
-dataset = [] #List which stores EVERYONE'S data
-PersonName = ""
-collectingData = False
+
 
 
 # basic MVC animation setup with Tkinter
 class DeterminatorAnimation(object):
 
     def __init__(self, width=300, height=300):
+        config.new = False
+        config.completed = True
+        config.dataset = [] #List which stores EVERYONE'S data
+        config.PersonName = ""
+        config.collectingData = False
         (self.width, self.height) = (width, height)
         self.timerDelay = 250 # milliseconds, this delay between timer events
 
@@ -137,7 +139,7 @@ class DeterminatorAnimation(object):
         elif self.page == "choose":
             self.clickChooseUser(event)
         elif self.page == "load":
-            self.clickLoading(event)
+            return
         elif self.page == "done":
             self.clickResults(event)
 
@@ -145,37 +147,22 @@ class DeterminatorAnimation(object):
     ## start screen logic
     def clickStart(self, event):
         if self.startButton.isClicked(event.x, event.y):
-            self.page = "choose"
             # Launch thread from here
-            thread.start_new_thread(serialtest.makeReadings, (10, ))
+            print "launch"
+            thread.start_new_thread(serialtest2.makeReadings, (10, ))
 
     ## user select screen logic
     def clickChooseUser(self, event):
-        global collectingData, _new, _completed, PersonName
         if self.returnButton.isClicked(event.x, event.y):
-            lock = thread.allocate_lock()
-            with lock:
-                CollectingData = True
-                _new = False
-                _completed = False
+            config.CollectingData = True
+            config.new = False
+            config.completed = False
         if self.newButton.isClicked(event.x, event.y):
-            lock = thread.allocate_lock()
-            with lock:
-                CollectingData = True
-                _new = True
-                PersonName = "Joe" # replace with function prompting user
-                _completed = False
+            config.CollectingData = True
+            config.new = True
+            config.PersonName = "Joe" # replace with function prompting user
+            config.completed = False
             self.page = "load"
-
-    ## awaiting results screen logic
-    def clickLoading(self, event):
-        global CollectingData
-        while(not _completed):
-            time.sleep(.2)
-        self.page = "done"
-        lock = thread.allocate_lock()
-        with lock:
-            CollectingData = False
 
     ## results screen logic
     def clickResults(self, event):
@@ -190,7 +177,11 @@ class DeterminatorAnimation(object):
     ## Timing stuff ############
     def onTimerFired(self):
         if not self.page == "load": return
-        pass
+        if(config.completed):
+            print "finished"
+            self.page = "done"
+            config.CollectingData = False
+
 
 
 # Button class for a button at a location with text and or color,
