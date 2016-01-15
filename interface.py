@@ -3,7 +3,7 @@ import serialtest2
 import thread
 import time
 import config
-
+import pymsgbox  # pip install PsyMsgBox
 
 
 
@@ -153,9 +153,9 @@ class DeterminatorAnimation(object):
         #backgroundImage = Tkinter.PhotoImage(file="blankedimage2.ppm")
         #backgroundLabel = Tkinter.Label(self.root,image=backgroundImage)
         #backgroundLabel.place(x=0,y=0)#,relWidth=1,relHeight=1)
-
+        text = "Hello{0}. Throw to see your stats.".format(config.PersonName)
         self.canvas.create_text(self.width / 2, self.height * 1 / 8,
-                        text = "Hello. Throw to see your stats.", font = "Georgia 50 bold")
+                        text = text , font = "Georgia 50 bold")
         self.canvas.create_text(self.width / 2, self.height * 2 / 8,
                         text = "Power: " + str(config.power_current) + "\t\tCurrent power highscore: " + str(config.power_highscore), font = "Georgia 25")
         self.canvas.create_text(self.width / 2, self.height * 3 / 8,
@@ -200,15 +200,17 @@ class DeterminatorAnimation(object):
             config.completed = False
             self.page = "load"
         if self.newButton.isClicked(event.x, event.y):
+            response = " " + pymsgbox.prompt('What is your name?')
             config.collectingData = True
             config.new = True
-            config.PersonName = "Joe" # replace with function prompting user
+            config.PersonName = response # replace with function prompting user
             config.completed = False
             self.page = "load"
 
     ## results screen logic
     def clickResults(self, event):
         if self.backButton.isClicked(event.x, event.y):
+            config.PersonName = ""
             self.page = "choose"
 
 

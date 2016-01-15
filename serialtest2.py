@@ -201,11 +201,11 @@ def analyze(oneset):
                 bestmatch = reading
 
         #calculate the difference in altitudes and accelerations
-        for i in range(min(len(bestmatch), len(oneset))):
-            altdiff = abs(bestmatch[i][0] - oneset[i][0])
-            accdiff = abs(bestmatch[i][1] - oneset[i][1])
-            difference += altdiff
-            difference += accdiff
+        #for i in range(min(len(bestmatch), len(oneset))):
+        #    altdiff = abs(bestmatch[i] - oneset[i])
+        #    accdiff = abs(bestmatch[i][1] - oneset[i][1])
+        #    difference += altdiff
+        #    difference += accdiff
         
         if (difference < result[1]):
             result = (Person[0], difference) #Update as a tuple of new name, and new difference
