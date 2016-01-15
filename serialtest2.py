@@ -60,7 +60,7 @@ def gatherData():
 #
 def makeReadings(memory):
     # open a serial connection
-    ser = serial.Serial('/dev/tty.usbserial-DA01P1HX')
+    ser = serial.Serial('/dev/tty.usbserial-DA01QTU5')
     IM = imuValueExtractors
 
     accels = []
@@ -89,10 +89,10 @@ def makeReadings(memory):
         #print "AccelMag ", accMag, "\t", len(accelList)
         prevacc = acc
         alt = 0
-        print config.CollectingData
-        if accMag == 0 or (not config.CollectingData):
+        print config.collectingData
+        if accMag == 0 or (not config.collectingData):
             continue
-        print acc[0], " ", acc[1], " ", acc[2]
+        #print acc[0], " ", acc[1], " ", acc[2]
         if(accMag > 1.5):
             count+=1
             data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])

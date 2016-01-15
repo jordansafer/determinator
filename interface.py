@@ -148,17 +148,17 @@ class DeterminatorAnimation(object):
     def clickStart(self, event):
         if self.startButton.isClicked(event.x, event.y):
             # Launch thread from here
-            print "launch"
+            self.page = "choose"
             thread.start_new_thread(serialtest2.makeReadings, (10, ))
 
     ## user select screen logic
     def clickChooseUser(self, event):
         if self.returnButton.isClicked(event.x, event.y):
-            config.CollectingData = True
+            config.collectingData = True
             config.new = False
             config.completed = False
         if self.newButton.isClicked(event.x, event.y):
-            config.CollectingData = True
+            config.collectingData = True
             config.new = True
             config.PersonName = "Joe" # replace with function prompting user
             config.completed = False
@@ -168,6 +168,7 @@ class DeterminatorAnimation(object):
     def clickResults(self, event):
         if self.backButton.isClicked(event.x, event.y):
             self.page = "choose"
+            
 
     ## KeyBoard stuff ############
     def onKeyPressed(self, event):
