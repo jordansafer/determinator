@@ -57,7 +57,6 @@ class DeterminatorAnimation(object):
         self.page = "start"
         self.initStart()
         self.initChooseUser()
-        self.initLoading()
         self.initResults()
 
     ## start screen
@@ -80,10 +79,6 @@ class DeterminatorAnimation(object):
         (p1, p2) = self.getPoints((x, y), dx, dy)
         self.returnButton = BetterButton(p1, p2, fill="#FFFBD0",
             text="Returning User", font = "arial 60 bold")
-
-    ## awaiting results screen
-    def initLoading(self):
-        pass
 
     ## results screen
     def initResults(self):
@@ -160,23 +155,29 @@ class DeterminatorAnimation(object):
                                         + str(config.power_highscore)
         self.canvas.create_text(self.width / 2, self.height * 2 / 8,
                         text = power, font = "Georgia 25")
-        text2 = "Distance: " + str(config.distance_current) + " feet" + "\tCurrent distance highscore: "\
-                                                + str(config.distance_highscore)
+        text2 = "Distance: " + str(config.distance_current) + " feet" + \
+            "\tCurrent distance highscore: " + str(config.distance_highscore)
         self.canvas.create_text(self.width / 2, self.height * 3 / 8,
                         text = text2, font = "Georgia 25")
-        hang = "Hangtime: " + str(config.hangtime_current) + " s" + "\tCurrent hangtime highscore: "\
-                                                + str(config.hangtime_highscore)
+        hang = "Hangtime: " + str(config.hangtime_current) + " s" + \
+            "\tCurrent hangtime highscore: " + str(config.hangtime_highscore)
         self.canvas.create_text(self.width / 2, self.height * 4 / 8,
                         text = hang, font = "Georgia 25")
-        if config.power_current == config.power_highscore and config.power_highscore != 0:
+        if config.power_current == config.power_highscore and \
+                                            config.power_highscore != 0:
             self.canvas.create_text(self.width / 2, self.height * 5 / 8,
-                        text = "NEW POWER RATING HIGHSCORE!  \t" + str(config.power_highscore), font = "Georgia 25 bold")
-        if config.distance_current == config.distance_highscore and config.distance_highscore != 0:
-             self.canvas.create_text(self.width / 2, self.height * 6 / 8,
-                        text = "NEW DISTANCE HIGHSCORE!  \t" + str(config.distance_highscore), font = "Georgia 25 bold")
-        if config.hangtime_current == config.hangtime_highscore and config.hangtime_highscore != 0:
-             self.canvas.create_text(self.width / 2, self.height * 7 / 8,
-                        text = "NEW HANGTIME HIGHSCORE!  \t" + str(config.hangtime_highscore), font = "Georgia 25 bold")
+                text = "NEW POWER RATING HIGHSCORE!  \t" +
+                str(config.power_highscore), font = "Georgia 25 bold")
+        if config.distance_current == config.distance_highscore and\
+                                            config.distance_highscore != 0:
+            self.canvas.create_text(self.width / 2, self.height * 6 / 8,
+                        text = "NEW DISTANCE HIGHSCORE!  \t" +
+                str(config.distance_highscore), font = "Georgia 25 bold")
+        if config.hangtime_current == config.hangtime_highscore and\
+                                            config.hangtime_highscore != 0:
+            self.canvas.create_text(self.width / 2, self.height * 7 / 8,
+                        text = "NEW HANGTIME HIGHSCORE!  \t" +
+                str(config.hangtime_highscore), font = "Georgia 25 bold")
 
     ################# Controller Time ############
     ## Mouse stuff ##
@@ -206,10 +207,10 @@ class DeterminatorAnimation(object):
             config.completed = False
             self.page = "load"
         if self.newButton.isClicked(event.x, event.y):
-            response = " " + pymsgbox.prompt('What is your name?')
+            response = pymsgbox.prompt('What is your name?')
             config.collectingData = True
             config.new = True
-            config.PersonName = response # replace with function prompting user
+            config.PersonName = " " + response
             config.completed = False
             self.page = "load"
 
