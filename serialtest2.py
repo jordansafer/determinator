@@ -113,7 +113,8 @@ def makeReadings(memory):
             accelList.append(accMag)
         elif len(accelList) > 0 and accelList[0] > 1.5 and count < 4:
             data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])
-            dataForML.append((alt, accMag))
+            dataTuple = (alt, accMag)
+            dataForML.append(dataTuple) #list of (altitudes, accelerations)
             accelList.append(accMag)
             count+=1
         else:
@@ -163,11 +164,16 @@ def makeReadings(memory):
 
                             onePersonData = copy.deepcopy(dataForML)
                             if(config.new):
-                                config.dataset.append( (config.PersonName, onePersonData) )
+                                found = False
+                                for i in xrange(len(config.dataset)):
+                                    if(config.dataset[i][0] == config.PersonName):
+                                        config.dataset[i][1].append(onePersonData)
+                                        found = True
+                                if not found:
+                                    config.dataset.append( (config.PersonName, [onePersonData]) )
                             #    #Add a record of person's data to set
                             else:
-                                pass
-                                #config.PersonName = analyze(onePersonData)
+                                config.PersonName = analyze(onePersonData)
                             config.completed = True
 
                             time.sleep(1)
@@ -186,7 +192,11 @@ def makeReadings(memory):
                 
 
 
+# dataset contains people
+# each person = (Name, data)
 #
+
+#[ (Persons Name, [ [ set1  ] ] ) ,
 def analyze(oneset):
 
     difference = 0.0
@@ -202,14 +212,17 @@ def analyze(oneset):
                 bestmatch = reading
 
         #calculate the difference in altitudes and accelerations
-        #for i in range(min(len(bestmatch), len(oneset))):
-        #    altdiff = abs(bestmatch[i] - oneset[i])
-        #    accdiff = abs(bestmatch[i][1] - oneset[i][1])
-        #    difference += altdiff
-        #    difference += accdiff
-        
+        for i in range(min(len(bestmatch), len(oneset))):
+            altdiff = abs(bestmatch[i][0] - oneset[i][0])
+            accdiff = abs(bestmatch[i][1] - oneset[i][1])
+            difference += altdiff
+            difference += accdiff
+
+        difference = difference / (len(oneset))
+
         if (difference < result[1]):
             result = (Person[0], difference) #Update as a tuple of new name, and new difference
+        difference = 0.0
 
     return result[0]
 
