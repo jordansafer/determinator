@@ -62,21 +62,21 @@ def makeReadings(memory):
 
         if(accMag > 1.5):
             count+=1
-            data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])
+            data.append([accMag, acc[0], acc[1], acc[2], time.time()])
             dataForML.append((ang, accMag))
             accelList.append(accMag)
         elif len(accelList) > 0 and accelList[0] > 1.5 and count < 4:
-            data.append([accMag, acc[0], acc[1], acc[2], alt, time.time()])
-            dataTuple = (alt, accMag)
-            dataForML.append(dataTuple) #list of (altitudes, accelerations)
+            data.append([accMag, acc[0], acc[1], acc[2], time.time()])
+            dataForML.append((ang, accMag)) #list of (altitudes, accelerations)
             accelList.append(accMag)
             count+=1
         else:
             if len(accelList) > 4:
-            #print "accel time sustain satisfied"
+                #print "accel time sustain satisfied"
                 if max(accelList) > 4:
                     #print "min accel reached"
-                    deltaT = data[2][5] - data[1][5]
+                    deltaTotalTime = data[len(data)-1][4] - data[0][4]
+                    deltaT = data[2][4] - data[1][4]
                     #print "got to hangtime: ", deltaTotalTime
                     if(deltaTotalTime > 0.3):
                         #print "BALL WAS THROWN"
@@ -115,12 +115,6 @@ def makeReadings(memory):
                                                             [onePersonData]))
                         else:
                             config.PersonName = analyze(onePersonData)
-                            if pymsgbox.prompt("Correct? (y/n)") == "y":
-                                for i in xrange(len(config.dataset)):
-                                    if(config.dataset[i][0] ==
-                                                    config.PersonName):
-                                        target = config.dataset[i][1]
-                                        target.append(onePersonData)
                         config.completed = True
 
                         time.sleep(1)
@@ -146,7 +140,6 @@ def analyze(oneset):
     for Person in config.dataset:
 
         for reading in Person[1]:
-
             readDif = 0.0
             #calculate the difference in altitudes and accelerations
             length = min(len(reading), len(oneset))
@@ -161,7 +154,6 @@ def analyze(oneset):
             difference += readDif
 
         difference = difference / (len(Person))
-
         if (difference < result[1] or result[1] == -1):
             #Update as a tuple of new name, and new difference
             result = (Person[0], difference)
